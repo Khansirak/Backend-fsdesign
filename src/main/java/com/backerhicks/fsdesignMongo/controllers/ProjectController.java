@@ -1,6 +1,7 @@
 package com.backerhicks.fsdesignMongo.controllers;
 import com.backerhicks.fsdesignMongo.entities.Project;
 import com.backerhicks.fsdesignMongo.entities.Recipe;
+import com.backerhicks.fsdesignMongo.entities.StepChain;
 import com.backerhicks.fsdesignMongo.repositories.LogicChainRepository;
 import com.backerhicks.fsdesignMongo.repositories.ProjectRepository;
 import com.backerhicks.fsdesignMongo.services.*;
@@ -33,7 +34,7 @@ public class ProjectController {
     private StepChainService stepChainService;
     private ActionStepTableService actionStepTableService;
     private GraphService graphService;
-//private Imageservice ImageService;
+
     @PostMapping
     ResponseEntity<Project> CreateProject() {
         try {
@@ -276,9 +277,28 @@ public class ProjectController {
 
     @PutMapping(value = "/recipe/stepchain/{id}")
     ResponseEntity<Project> saveStepChain(@PathVariable String id, @RequestBody Map<String, Object> payload) {
-
         try {
             Project logic = stepChainService.createStepChain(id, (String) payload.get("flow"), (String) payload.get("chainArray"));
+            return ResponseEntity.status(HttpStatus.OK).body(logic);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @PutMapping(value = "/recipe/stepchainholdabort/{holdabortid}/{id}")
+    ResponseEntity<Project> saveStepChainHoldAbort(@PathVariable String id, @PathVariable String holdabortid, @RequestBody Map<String, Object> payload) {
+        try {
+            Project logic = stepChainService.createStepChainHoldAbort(id, holdabortid,(String) payload.get("flow"), (String) payload.get("chainArray"));
+            return ResponseEntity.status(HttpStatus.OK).body(logic);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    @GetMapping(value = "/recipe/stepchainholdabort/{holdabortid}/{id}/")
+    ResponseEntity<StepChain> getStepChainHoldAbort(@PathVariable String id, @PathVariable String holdabortid) {
+        try {
+            StepChain logic = stepChainService.getStepChainHoldAbort(id, holdabortid);
             return ResponseEntity.status(HttpStatus.OK).body(logic);
         } catch (Exception e) {
             return null;
@@ -288,7 +308,6 @@ public class ProjectController {
 
     @PutMapping(value = "/recipe/actionsteptable/{id}")
     ResponseEntity<Project> saveActionStepTable(@PathVariable String id, @RequestBody String payload) {
-
         try {
             Project logic = actionStepTableService.createActionStepTable(id,payload);
             return ResponseEntity.status(HttpStatus.OK).body(logic);

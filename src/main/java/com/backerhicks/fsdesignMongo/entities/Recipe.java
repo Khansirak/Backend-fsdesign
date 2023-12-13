@@ -44,6 +44,9 @@ public class Recipe {
     private StepChain StepChain;
 
     @DBRef
+    private Set<StepChain> StepChainHoldAbort;
+
+    @DBRef
     private Set<Recipe> subOperations = new HashSet<>();
 
     @DBRef

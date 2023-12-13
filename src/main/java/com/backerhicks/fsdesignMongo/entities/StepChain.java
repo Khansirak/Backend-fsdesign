@@ -26,7 +26,6 @@ public class StepChain {
 
     private Bson stepChain;
 
-
     private String actionStepArray;
 
     @DBRef
