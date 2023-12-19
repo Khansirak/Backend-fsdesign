@@ -10,11 +10,11 @@ pool:
   vmImage: ubuntu-latest
 
 steps:
-- task: Maven@4
+- task: Maven@3
   inputs:
     mavenPomFile: 'pom.xml'
     mavenOptions: '-Xmx3072m'
-    jdkVersionOption: '1.20'
+    jdkVersionOption: '1.17'
     javaHomeOption: 'JDKVersion'
     jdkArchitectureOption: 'x64'
     publishJUnitResults: true
