@@ -5,7 +5,9 @@
 
 trigger:
 - main
-
+variables:
+- name: MONGODB_PRIMARY_CONNECTION_STRING
+  value: mongodb://root:root@localhost:27017/fsdesign
 pool:
   vmImage: ubuntu-latest
 
