@@ -44,12 +44,15 @@ public class Recipe {
     private StepChain StepChain;
 
     @DBRef
+    private Set<StepChain> StepChainHoldAbort;
+
+    @DBRef
     private Set<Recipe> subOperations = new HashSet<>();
 
     @DBRef
     private Set<Recipe> subPhases = new HashSet<>();
 
 
-    public void setParameterTables(ParameterTable parameterTable) {
-    }
+//    public void setParameterTables(ParameterTable parameterTable) {
+//    }
 }

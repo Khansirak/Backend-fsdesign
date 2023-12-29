@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @AllArgsConstructor
@@ -21,7 +22,6 @@ public class StepChainService {
     private StepChainRepository stepChainRepository;
 
     public Project createStepChain(String id, String flow, String chainArray) {
-
         Document bsonDocument = Document.parse((flow));
         List<Recipe> listOfRecipes = recipeRepository.findAll();
         Recipe recipeOptional = listOfRecipes.stream()
@@ -29,9 +29,7 @@ public class StepChainService {
                 .findFirst()
                 .orElse(null);
                 if (recipeOptional !=null ) {
-
                     StepChain StepChainNew = recipeOptional.getStepChain();
-
                     if (StepChainNew==null){
                         StepChain stepchainTable = new StepChain();
                         stepchainTable.setId(id);
@@ -39,75 +37,49 @@ public class StepChainService {
                         stepchainTable.setStepChain(bsonDocument);
                         stepchainTable.setActionStepArray(chainArray);
                         stepchainTable = stepChainRepository.save(stepchainTable);
-
                         recipeOptional.setStepChain(stepchainTable);
                         recipeRepository.save(recipeOptional);
-
                     }
                     else{
-
                         StepChainNew.setStepChain(bsonDocument);
                         StepChainNew.setActionStepArray(chainArray);
                         StepChainNew = stepChainRepository.save(StepChainNew);
                         recipeOptional.setStepChain(StepChainNew);
                          recipeRepository.save(recipeOptional);
                     }
-
-
                 }
+        return null;
+    }
+    public Project createStepChainHoldAbort(String id,String holdabortid, String flow, String chainArray) {
+        Document bsonDocument = Document.parse((flow));
+        List<Recipe> listOfRecipes = recipeRepository.findAll();
+        Recipe recipeOptional = listOfRecipes.stream()
+                .filter(recipe -> recipe.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+        if (recipeOptional !=null ) {
+            Set<StepChain> StepChainNew =  recipeOptional.getStepChainHoldAbort();
+                StepChain stepchainTable = new StepChain();
+                stepchainTable.setId(holdabortid);
+                stepchainTable.setRecipe_id(id);
+                stepchainTable.setStepChain(bsonDocument);
+                stepchainTable.setActionStepArray(chainArray);
+                stepchainTable = stepChainRepository.save(stepchainTable);
+                 StepChainNew.add(stepchainTable);
+                recipeOptional.setStepChainHoldAbort(StepChainNew);
+                recipeRepository.save(recipeOptional);
 
-
+        }
         return null;
     }
 
-//    public Project createStepArray(String id, String payload) {
-//        String projectid= "64e49be16e87794364abafb4";
-//
-//        Document bsonDocument = Document.parse((payload));
-//        Project project = projectRepository.findById(projectid).orElse(null);
-//        try{
-//            if (project != null) {
-//                Optional<Recipe> recipeOptional = project.getRecipe().stream()
-//                        .filter(recipe -> recipe.getId().equals(id))
-//                        .findFirst();
-//
-//                if (recipeOptional.isPresent()) {
-//
-//                    //try
-//                    StepChain StepChainNew = recipeOptional.orElseThrow().getStepChain();
-//
-//                    if (StepChainNew==null){
-//                        StepChain stepchainTable = new StepChain();
-//                        stepchainTable.setId(id);
-//                        stepchainTable.setRecipe_id(id);
-//                        stepchainTable.setActionStepArray(bsonDocument);
-//                        stepchainTable = stepChainRepository.save(stepchainTable);
-//                        Recipe recipeToUpdate = recipeOptional.get();
-//                        recipeToUpdate.setStepChain(stepchainTable);
-//                        recipeRepository.save(recipeToUpdate);
-//
-//                    }
-//                    else{
-//
-//                        StepChainNew.setStepChain(bsonDocument);
-//                        StepChainNew = stepChainRepository.save(StepChainNew);
-//
-//                        Recipe recipeToUpdate = recipeOptional.get();
-//                        recipeToUpdate.setStepChain(StepChainNew);
-//                        recipeRepository.save(recipeToUpdate);
-//                    }
-//                    projectRepository.save(project);
-//                    return project;
-//
-//                }
-//            }
-//
-//        }
-//        catch (Exception e) {
-//            return project;
-//        }
-//        return project;
-//    }
+    public StepChain getStepChainHoldAbort(String id, String holdabortid) {
+            Optional<Recipe> recipe=recipeRepository.findById(id);
 
-
+        if (recipe !=null ) {
+            StepChain stepchain =stepChainRepository.findByRecipeIdAndId(id,holdabortid);
+            return stepchain;
+        }
+        return null;
+    }
 }

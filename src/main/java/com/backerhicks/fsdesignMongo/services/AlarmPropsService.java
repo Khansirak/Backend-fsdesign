@@ -27,7 +27,6 @@ public class AlarmPropsService {
 
             Document bsonDocument = Document.parse((payload));
 
-
             List<Recipe> listOfRecipes = recipeRepository.findAll();
             Recipe recipeOptional = listOfRecipes.stream()
                     .filter(recipe -> recipe.getId().equals(id))
@@ -47,10 +46,10 @@ public class AlarmPropsService {
 
                             recipeOptional.setAlarmPropsData(alarmpropTable);
                             recipeOptional = recipeRepository.save(recipeOptional);
-
                             return null;
                         }
                         Document oldbsonDocuemnt= (Document) alarmpropsTableNew.getAlarmpropsData();
+
 
 // Iterate through the keys in newbsonDocument
                         for (String key : bsonDocument.keySet()) {
@@ -70,6 +69,8 @@ public class AlarmPropsService {
                             }
                         }
 
+                        System.out.println(oldbsonDocuemnt);
+
                         AlarmProps alarmpropTable = new AlarmProps();
                         alarmpropTable.setId(id);
                         alarmpropTable.setRecipe_id(id);
@@ -81,6 +82,7 @@ public class AlarmPropsService {
                         recipeOptional = recipeRepository.save(recipeOptional);
 
                         return null;
+
                     }
 
 

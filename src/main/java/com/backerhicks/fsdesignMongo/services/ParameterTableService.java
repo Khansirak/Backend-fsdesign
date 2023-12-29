@@ -25,7 +25,7 @@ public class ParameterTableService {
     private RecipeRepository recipeRepository;
     public Project createTable(String id, String payload){
         Document bsonDocument = Document.parse((payload));
-        try{
+
 //    if (project != null) {
             List<Recipe> listOfRecipes = recipeRepository.findAll();
             Recipe recipeOptional = listOfRecipes.stream()
@@ -60,12 +60,15 @@ public class ParameterTableService {
                     for (String subKey : newSubDocument.keySet()) {
                         // Update the corresponding value in oldSubDocument with the value from newSubDocument
                         oldSubDocument.put(subKey, newSubDocument.get(subKey));
+
                     }
                     // Update the corresponding key in oldbsonDocuemnt with the updated sub-document
                     oldbsonDocuemnt.put(key, oldSubDocument);
                 }
+
             }
-System.out.println(oldbsonDocuemnt);
+
+                System.out.println(oldbsonDocuemnt);
             ParameterTable parameterTable = new ParameterTable();
             parameterTable.setId(id);
             parameterTable.setRecipe_id(id);
@@ -79,12 +82,6 @@ System.out.println(oldbsonDocuemnt);
         }
         }
 
-
-//    }
-}
-     catch (Exception e) {
-                return null;
-            }
 
 
 
